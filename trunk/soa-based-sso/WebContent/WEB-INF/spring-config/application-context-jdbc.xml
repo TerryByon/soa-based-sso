@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-2.5.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+    	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+	<!-- JNDI -->
+	<jee:jndi-lookup id="dataSource" jndi-name="jdbc/sso" resource-ref="true" />
+
+	<!-- DIRECT -->
+	<!--
+	org.apache.commons.dbcp.BasicDataSource의 주요 프로프티 설정
+	프로프티                                                            : 설명
+	initialSize                   : 초기에 풀에 생성되는 커넥션의 개수.
+	maxActive                     : 커넥션 풀이 제공할 최대 커넥션 개수.
+	maxIdle                       : 사용되지 않고 풀에 저장될 수 있는 최대 커넥션 개수(음수인 경우 무제한).
+	minIdle                       : 사용되지 않고 풀에 저장될 수 있는 최소 커넥션 개수.
+	maxWait                       : 풀에 커넥션이 존재하지 않을 때, 커넥션이 다시 풀에 리턴될 대까지 대기하는 시간(단위: 1/1000초, 음수는 무한대기).
+	minEvictableIdleTimeMillis    : 사용되지 않는 커넥션을 추출할 때 이 속성에서 지정한 시간 이상 비활성화 상태인 커텍션만 추출한다.
+                                                                                                 음수인 경우 비활성화된 시간으로는 풀에서 제거되지 않음(단위: 1/1000초)
+	timeBetweenEvictionRunsMillis : 사용되지 않는 커넥션을 추출하는 쓰레드의 실행 주기를 지정한다(단위: 1/1000초, 음수일 경우 실행하지 않음).
+	numTestsPerEvictionRun        : 사용죄지 않는 커넥션을 몇 개 검사할지 지정한다.
+	testOnBorrow                  : true일 경우 커넥션 풀에서 커넥션을 가져올 때 커넥션이 유효한지의 여부를 검사한다.
+	testOnReturn                  : true일 경우 커넥션 풀에 커넥션을 반환할 때 커넥션이 유효한지의 여부를 검사한다.
+	testWhileIdle                 : true일 경우 비활성호 ㅏ커넥션을 추출할 때 커넥션이 유효한지의 여부를 검사해서 유효하지 않은 커넥션은 풀에서 제거한다.
+	-->
+<!--	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">-->
+<!--		<property name="driverClassName" value="com.mysql.jdbc.Driver" />-->
+<!--		<property name="url" value="jdbc:mysql://192.168.0.252:3306/abis" />-->
+<!--		<property name="username" value="abisuser" />-->
+<!--		<property name="password" value="abisuser!" />-->
+<!--		<property name="initialSize" value="5" />-->
+<!--		<property name="maxActive" value="100" />-->
+<!--		<property name="maxIdle" value="5" />-->
+<!--		<property name="minIdle" value="5" />-->
+<!--		<property name="maxWait" value="10000" />-->
+<!--		<property name="minEvictableIdleTimeMillis" value="" />-->
+<!--		<property name="timeBetweenEvictionRunsMillis" value="" />-->
+<!--		<property name="numTestsPerEvictionRun" value="" />-->
+<!--		<property name="testOnBorrow" value="" />-->
+<!--		<property name="testOnReturn" value="" />-->
+<!--		<property name="testWhileIdle" value="true" />-->
+<!--		<property name="poolPreparedStatements" value="true" />-->
+<!--	</bean>-->
+
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+
+		<property name="annotatedClasses">
+			<list>
+ 				<value>com.apex.sso.entity.Server</value>
+ 				<value>com.apex.sso.entity.User</value>
+			</list>
+		</property>
+
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
+				<prop key="hibernate.cache.use_second_level_cache">false</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.cache.use_query_cache">true</prop>
+			</props>
+		</property>
+	</bean>
+
+<!--	<bean class="org.springframework.orm.hibernate3.HibernateTemplate" p:sessionFactory-ref="sessionFactory" />-->
+
+	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager" p:sessionFactory-ref="sessionFactory" />
+
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="insert*" propagation="REQUIRED" rollback-for="Throwable,Exception" />
+			<tx:method name="update*" propagation="REQUIRED" rollback-for="Throwable,Exception" />
+			<tx:method name="delete*" propagation="REQUIRED" rollback-for="Throwable,Exception" />
+			<tx:method name="*" propagation="REQUIRED" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+
+	<aop:config>
+		<aop:pointcut id="managerPublicMethod" expression="execution(public * com.apex.sso..*Manager.*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="managerPublicMethod" />
+	</aop:config>
+</beans>
