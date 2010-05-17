@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ssoClient" basedir="." default="run">
+	<property file="client.build.properties" />
+
+	<path id="libs">
+		<fileset dir="${source.was}/WebContent/WEB-INF/lib">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${tomcat.home}/lib">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<path id="svnant.classpath">
+		<fileset dir="${svnant.home}/lib">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<path id="srcdir">
+		<dirset dir="${source.was}/clientSrc" />
+		<dirset dir="${source.was}/src" />
+	</path>
+	
+	<typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="svnant.classpath" />
+
+	<target name="checkout.ssoClient">
+		<echo>start sso client project checkout</echo>
+		<svn username="sangsagi" password="1111">
+			<checkout url="${checkout.ssoClient.url}" revision="HEAD" destPath="${source.was}" />
+		</svn>
+		<echo>end sso client project checkout</echo>
+	</target>
+
+	<target name="compile" depends="checkout.ssoClient">
+		<echo>start compile sso client</echo>
+		<mkdir dir="${compile.path}" />
+		<javac destdir="${compile.path}" debug="on" encoding="UTF-8">
+			<include name="**/**/*.java" />
+			<classpath refid="libs" />
+			<src refid="srcdir"/>
+		</javac>
+		<echo>end compile sso client</echo>
+	</target>
+
+	<target name="jar" depends="compile">
+		<mkdir dir="${jar.path}" />
+		<jar destfile="${jar.path}/sso-client.jar">
+		    <fileset dir="${compile.path}">
+		 		<include name="com/apex/sso/client/**" />
+		    	<include name="util/*.*" />
+		 	</fileset>
+		</jar> 
+	</target>
+	
+	<target name="copy-lib" depends="jar">
+		<mkdir dir="${jar.path}/lib" />
+		<copy todir="${jar.path}/lib">
+			<fileset dir="${source.was}/WebContent/WEB-INF/lib">
+				<include name="kasdaq-commons.jar" />
+				<include name="commons-configuration-1.6.jar" />
+				<include name="commons-httpclient-3.1.jar" />
+				<include name="commons-logging.jar" />
+				<include name="commons-lang.jar" />
+				<include name="commons-collections.jar" />
+				<include name="commons-codec.jar" />
+				<include name="dom4j-1.6.1.jar" />
+				<include name="xercesImpl.jar" />
+				<include name="jaxen-1.1.1.jar" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="copy-ext" depends="copy-lib">
+		<copy todir="${jar.path}">
+			<fileset dir="${source.was}/clientSrc">
+				<include name="log4j.properies" />
+				<include name="serverStart.bat" />
+				<include name="serverStart.sh" />
+				<include name="config.xml" />
+				<include name="test.sec" />
+				<include name="INSTALL.txt" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="zip" depends="copy-ext">
+		<zip destfile="${source.dir}/ssoClient.zip" basedir="${jar.path}" />
+	</target>
+	
+	<target name="run">
+		<antcall target="zip" />
+	</target>
+</project>

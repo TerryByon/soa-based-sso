@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Server port="8005" shutdown="SHUTDOWN">
+	<Listener SSLEngine="on" className="org.apache.catalina.core.AprLifecycleListener"/>
+	<Listener className="org.apache.catalina.core.JasperListener"/>
+	<Listener className="org.apache.catalina.mbeans.ServerLifecycleListener"/>
+	<Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener"/>
+	<GlobalNamingResources>
+		<Resource auth="Container" description="User database that can be updated and saved" factory="org.apache.catalina.users.MemoryUserDatabaseFactory" name="UserDatabase" pathname="conf/tomcat-users.xml" type="org.apache.catalina.UserDatabase"/>
+<!-- 	<Resource auth="Container" description="sso" driverClassName="com.mysql.jdbc.Driver" maxActive="20" maxIdle="10" maxWait="-1" name="jdbc/sso" password="abisuser!" type="javax.sql.DataSource" url="jdbc:mysql://222.122.163.241:3306/abis" username="abisuser"/>	</GlobalNamingResources>
+
+  		<Resource auth="Container" description="SSO 5.0 JDBC DataSource" driverClassName="org.hsqldb.jdbcDriver" maxActive="20" maxIdle="10" maxWait="-1" name="jdbc/sso" password="" type="javax.sql.DataSource" url="jdbc:hsqldb:hsql://localhost:9010/sso" username="sa"/>-->
+	</GlobalNamingResources>
+	<Service name="Catalina">
+		<Connector URIEncoding="UTF-8" acceptCount="100" connectionTimeout="20000" debug="0" disableUploadTimeout="true" enableLookups="false" maxSpareThreads="75" maxThreads="150" minSpareThreads="25" port="8032" protocol="HTTP/1.1" redirectPort="8443" useBodyEncodingForURL="true"/>
+		<Connector URIEncoding="UTF-8" port="8009" protocol="AJP/1.3" redirectPort="8443"/>
+		<Engine defaultHost="localhost" name="Catalina">
+			<Realm className="org.apache.catalina.realm.UserDatabaseRealm" resourceName="UserDatabase"/>
+			<Host appBase="webapps" autoDeploy="true" name="localhost" unpackWARs="true" xmlNamespaceAware="false" xmlValidation="false">
+
+				<Context docBase="sso" path="/sso" reloadable="true" source="org.eclipse.jst.jee.server:sso">
+					<Resource auth="Container" description="Kasdaq MySQL 5.0 JDBC DataSource" driverClassName="org.hsqldb.jdbcDriver" maxActive="5" maxIdle="3" maxWait="-1"
+						name="jdbc/sso" password="" type="javax.sql.DataSource" url="jdbc:hsqldb:hsql://localhost:9010/sso" username="sa" />
+				</Context>
+			</Host>
+		</Engine>
+	</Service>
+</Server>

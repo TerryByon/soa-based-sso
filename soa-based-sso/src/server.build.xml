@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ssoServer" basedir="." default="run">
+    <property file="server.build.properties" />
+
+    <path id="libs">
+        <fileset dir="${source.was}/WebContent/WEB-INF/lib">
+            <include name="**/*.jar" />
+        </fileset>
+        <fileset dir="${tomcat.home}/lib">
+            <include name="**/*.jar" />
+        </fileset>
+    </path>
+
+    <path id="svnant.classpath">
+        <fileset dir="${svnant.home}/lib">
+            <include name="**/*.jar" />
+        </fileset>
+    </path>
+
+    <typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="svnant.classpath" />
+
+    <target name="checkout.ssoServer">
+        <echo>start search project checkout</echo>
+        <echo>checkout[srcdir: ${checkout.search.url}, destdir: ${source.was}]</echo>
+        <svn username="${username}" password="${password}">
+            <checkout url="${checkout.ssoServer.url}" revision="HEAD" destPath="${source.was}" />
+        </svn>
+        <echo>end search project checkout</echo>
+    </target>
+
+    <target name="compile" depends="checkout.ssoServer">
+        <echo>start compile search</echo>
+        <echo>compile[srcdir: ${source.was}/src, destdir: ${compile.path}]</echo>
+        <mkdir dir="${compile.path}" />
+        <javac srcdir="${source.was}/src" destdir="${compile.path}" debug="on" encoding="UTF-8">
+            <include name="**/**/*.java" />
+            <classpath refid="libs" />
+        </javac>
+        <echo>end compile search</echo>
+    </target>
+
+    <target name="copy.web" depends="compile">
+        <echo>start copy web resource</echo>
+        <mkdir dir="${web.root}/css" />
+        <mkdir dir="${web.root}/js" />
+
+        <echo>copy css[srcdir: ${source.was}/WebContent/css, destdir: ${web.root}/css]</echo>
+        <copy todir="${web.root}/css">
+            <fileset dir="${source.was}/WebContent/css">
+                <exclude name="**/.svn/**" />
+                <exclude name="**/bis_css.css" />
+                <include name="**/*.*" />
+            </fileset>
+        </copy>
+
+        <echo>copy js[srcdir: ${source.was}/WebContent/js, destdir: ${web.root}/js]</echo>
+        <copy todir="${web.root}/js">
+            <fileset dir="${source.was}/WebContent/js">
+                <exclude name="**/.svn/**" />
+                <include name="**/**/*.*" />
+            </fileset>
+        </copy>
+
+        <echo>copy html[srcdir: ${source.was}/WebContent/, destdir: ${web.root}/]</echo>
+        <copy todir="${web.root}/">
+            <fileset dir="${source.was}/WebContent/">
+                <exclude name="**/.svn/**" />
+                <include name="**/**/*.html" />
+            </fileset>
+        </copy>
+
+        <echo>end copy web resource</echo>
+    </target>
+
+    <target name="copy.was" depends="copy.web">
+        <echo>start copy was resource</echo>
+        <echo>copy was resource[srcdir: ${source.was}/WebContent, destdir: ${was.root}]</echo>
+        <copy todir="${was.root}">
+            <fileset dir="${source.was}/WebContent">
+                <exclude name="**/.svn/**" />
+                <exclude name="**/js/**" />
+                <exclude name="**/fckeditor/**" />
+                <exclude name="**/*.swf" />
+                <exclude name="**/*.htm" />
+                <exclude name="**/css/**" />
+                <include name="**/*.*" />
+            </fileset>
+        </copy>
+
+        <mkdir dir="${was.root}/WEB-INF/classes/" />
+        <echo>copy classes[srcdir: ${compile.path}, destdir: ${was.root}/WEB-INF/classes]</echo>
+        <copy todir="${was.root}/WEB-INF/classes/">
+            <fileset dir="${compile.path}">
+                <exclude name="**/.svn/**" />
+                <include name="**/**" />
+            </fileset>
+        </copy>
+
+		<copy todir="${was.root}/WEB-INF/classes/">
+			<fileset dir="${source.was}/src">
+                <include name="**/*.xml" />
+                <include name="**/*.dic" />
+                <include name="**/*.jflex" />
+                <include name="**/*.properties" />
+			</fileset>
+		</copy>
+        <echo>end copy was resource</echo>
+    </target>
+
+    <target name="run">
+        <antcall target="copy.was" />
+    </target>
+</project>

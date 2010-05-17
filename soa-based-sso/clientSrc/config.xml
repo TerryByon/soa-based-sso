@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<my-id>1</my-id>
+	<sec-key-file-name>test.sec</sec-key-file-name>
+	<sso-server-host>http://125.177.188.10</sso-server-host>
+	<sso-server-port>10080</sso-server-port>
+	<debug-mode>true</debug-mode>
+</configuration>
