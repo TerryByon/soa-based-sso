@@ -9,7 +9,7 @@ import com.apex.sso.handShake.IHandShakeDao;
 import com.apex.sso.support.HibernateSessionSupport;
 
 @Repository
-@SuppressWarnings("unchecked")
+//@SuppressWarnings("unchecked")
 public class HandShakeDao extends HibernateSessionSupport implements IHandShakeDao {
 	protected final Log logger = LogFactory.getLog(getClass());
 

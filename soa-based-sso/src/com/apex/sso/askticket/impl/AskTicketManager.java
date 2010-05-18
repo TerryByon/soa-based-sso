@@ -10,8 +10,6 @@ import com.apex.sso.askticket.IAskTicketDao;
 import com.apex.sso.askticket.IAskTicketManager;
 import com.apex.sso.entity.User;
 
-import com.apex.sso.entity.Server;
-
 @Service
 public class AskTicketManager implements IAskTicketManager {
 	protected final Log logger = LogFactory.getLog(getClass());

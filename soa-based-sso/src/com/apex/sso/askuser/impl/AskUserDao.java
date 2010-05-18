@@ -10,7 +10,7 @@ import com.apex.sso.entity.User;
 import com.apex.sso.support.HibernateSessionSupport;
 
 @Repository
-@SuppressWarnings("unchecked")
+//@SuppressWarnings("unchecked")
 public class AskUserDao extends HibernateSessionSupport implements IAskUserDao {
 	protected final Log logger = LogFactory.getLog(getClass());
 
