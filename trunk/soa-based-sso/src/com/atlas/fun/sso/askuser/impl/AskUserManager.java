@@ -1,13 +1,13 @@
-package com.apex.sso.askuser.impl;
+package com.atlas.fun.sso.askuser.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.apex.sso.askuser.IAskUserDao;
-import com.apex.sso.askuser.IAskUserManager;
-import com.apex.sso.entity.User;
+import com.atlas.fun.sso.askuser.IAskUserDao;
+import com.atlas.fun.sso.askuser.IAskUserManager;
+import com.atlas.fun.sso.entity.User;
 
 @Service
 public class AskUserManager implements IAskUserManager {
@@ -26,8 +26,5 @@ public class AskUserManager implements IAskUserManager {
 	public void deleteUser(User user) {
 		dao.deleteUser(user);
 	}
-
-
-
 
 }

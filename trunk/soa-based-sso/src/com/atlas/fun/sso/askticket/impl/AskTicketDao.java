@@ -1,15 +1,15 @@
-package com.apex.sso.askticket.impl;
+package com.atlas.fun.sso.askticket.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Repository;
 
-import com.apex.sso.askticket.IAskTicketDao;
-import com.apex.sso.entity.User;
-import com.apex.sso.support.HibernateSessionSupport;
+import com.atlas.fun.sso.askticket.IAskTicketDao;
+import com.atlas.fun.sso.entity.User;
+import com.atlas.fun.sso.support.HibernateSessionSupport;
 
 @Repository
-//@SuppressWarnings("unchecked")
+// @SuppressWarnings("unchecked")
 public class AskTicketDao extends HibernateSessionSupport implements IAskTicketDao {
 	protected final Log logger = LogFactory.getLog(getClass());
 
