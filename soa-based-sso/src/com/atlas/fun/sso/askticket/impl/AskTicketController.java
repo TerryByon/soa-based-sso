@@ -1,4 +1,4 @@
-package com.apex.sso.askticket.impl;
+package com.atlas.fun.sso.askticket.impl;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -20,12 +20,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import util.EnDeClip;
 
-import com.apex.sso.askticket.IAskTicketController;
-import com.apex.sso.askticket.IAskTicketManager;
-import com.apex.sso.entity.Server;
-import com.apex.sso.entity.User;
-import com.apex.sso.handShake.IHandShakeManger;
-import com.apex.sso.handShake.impl.HandShakeController;
+import com.atlas.fun.sso.askticket.IAskTicketController;
+import com.atlas.fun.sso.askticket.IAskTicketManager;
+import com.atlas.fun.sso.entity.Server;
+import com.atlas.fun.sso.entity.User;
+import com.atlas.fun.sso.handShake.IHandShakeManger;
+import com.atlas.fun.sso.handShake.impl.HandShakeController;
 
 @Controller
 @RequestMapping("/askticket.apx")
@@ -39,13 +39,13 @@ public class AskTicketController implements IAskTicketController {
 	private IHandShakeManger handManager;
 
 	@RequestMapping
-	public void getTicket(User user,HttpServletRequest request, HttpServletResponse response){
-		String isSession = (String)request.getSession().getAttribute("isSession");
-		String serverId = (String)request.getSession().getAttribute("serverId");
-		if(isSession==null ||(isSession!=null && !isSession.equals("isSession"))){
+	public void getTicket(User user, HttpServletRequest request, HttpServletResponse response) {
+		String isSession = (String) request.getSession().getAttribute("isSession");
+		String serverId = (String) request.getSession().getAttribute("serverId");
+		if (isSession == null || (isSession != null && !isSession.equals("isSession"))) {
 			request.getSession().invalidate();
 		}
-		if(serverId==null){
+		if (serverId == null) {
 			request.getSession().invalidate();
 		}
 		response.setCharacterEncoding("UTF-8");
@@ -55,74 +55,70 @@ public class AskTicketController implements IAskTicketController {
 			out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 			out.println("<root>");
 			Server server = handManager.getServer(ip);
-			if(server == null){
-				//세션 끊김
+			if (server == null) {
+				// 세션 끊김
 				out.println("<result>flase</result>");
 				request.getSession().invalidate();
 				out.println("</root>");
 				return;
 			}
-			try{
+			try {
 				ByteArrayInputStream bis = new ByteArrayInputStream(server.getSecurityKey());
 				ObjectInputStream ois = new ObjectInputStream(bis);
 				EnDeClip.setUp();
-				Key key = (Key)ois.readObject();
+				Key key = (Key) ois.readObject();
 				String userid = EnDeClip.decrypt(user.getUserid(), key);
 				String userinfo = EnDeClip.decrypt(user.getUserinfo(), key);
 
-				if(userid!=null && userinfo != null){
+				if (userid != null && userinfo != null) {
 					user.setUserid(userid);
 					user.setUserinfo(userinfo);
 					manager.insertUser(serverId, user);
 					out.println("<result>true</result>");
-				}else{
-
+				} else {
 					out.println("<result>false</result>");
-
 				}
-				String input = server.getId()+"//"+user.getId()+"//"+user.getUserid() +"//"+ user.getValidtime();
+				String input = server.getId() + "//" + user.getId() + "//" + user.getUserid() + "//" + user.getValidtime();
 				String ticket = EnDeClip.encrypt(input, HandShakeController.getServerKey());
-				out.println(String.format("<ticket>%s</ticket>",ticket));
+				out.println(String.format("<ticket>%s</ticket>", ticket));
 				out.println("</root>");
-				//세션 끊김
+				// 세션 끊김
 				request.getSession().invalidate();
-			}catch(InvalidKeyException ie){
-				if(logger.isErrorEnabled()) logger.error(ie.getMessage(), ie);
+			} catch (InvalidKeyException ie) {
+				if (logger.isErrorEnabled()) logger.error(ie.getMessage(), ie);
 				out.println("<result>flase</result>");
 				request.getSession().invalidate();
 				out.println("</root>");
-			}catch(BadPaddingException bpe){
-				if(logger.isErrorEnabled()) logger.error(bpe.getMessage(), bpe);
+			} catch (BadPaddingException bpe) {
+				if (logger.isErrorEnabled()) logger.error(bpe.getMessage(), bpe);
 				out.println("<result>flase</result>");
 				request.getSession().invalidate();
 				out.println("</root>");
-			}catch(IllegalBlockSizeException ibse){
-				if(logger.isErrorEnabled()) logger.error(ibse.getMessage(), ibse);
+			} catch (IllegalBlockSizeException ibse) {
+				if (logger.isErrorEnabled()) logger.error(ibse.getMessage(), ibse);
 				out.println("<result>flase</result>");
 				request.getSession().invalidate();
 				out.println("</root>");
-			} catch(IOException e) {
-				if(logger.isErrorEnabled()) logger.error(e.getMessage(), e);
+			} catch (IOException e) {
+				if (logger.isErrorEnabled()) logger.error(e.getMessage(), e);
 				out.println("<result>flase</result>");
 				request.getSession().invalidate();
 				out.println("</root>");
 			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
+				if(logger.isErrorEnabled()) logger.error(e.getMessage(), e);
 				out.println("<result>flase</result>");
 				request.getSession().invalidate();
 				out.println("</root>");
-			} catch (Exception ex){
-				ex.printStackTrace();
+			} catch (Exception ex) {
+				if(logger.isErrorEnabled()) logger.error(ex.getMessage(), ex);
 				out.println("<result>flase</result>");
 				request.getSession().invalidate();
 				out.println("</root>");
 			}
 
 			return;
-		} catch(IOException e) {
-			if(logger.isErrorEnabled()) logger.error(e.getMessage(), e);
+		} catch (IOException e) {
+			if (logger.isErrorEnabled()) logger.error(e.getMessage(), e);
 		}
-
 	}
-
 }

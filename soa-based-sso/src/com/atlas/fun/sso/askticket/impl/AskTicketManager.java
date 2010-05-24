@@ -1,4 +1,4 @@
-package com.apex.sso.askticket.impl;
+package com.atlas.fun.sso.askticket.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.apex.commons.utils.DateUtil;
-import com.apex.sso.askticket.IAskTicketDao;
-import com.apex.sso.askticket.IAskTicketManager;
-import com.apex.sso.entity.User;
+import com.atlas.fun.sso.askticket.IAskTicketDao;
+import com.atlas.fun.sso.askticket.IAskTicketManager;
+import com.atlas.fun.sso.entity.User;
 
 @Service
 public class AskTicketManager implements IAskTicketManager {
@@ -19,9 +19,9 @@ public class AskTicketManager implements IAskTicketManager {
 
 	@Override
 	public void insertUser(String serverid, User user) {
-//		Server server = new Server();
-//		server.setId(Integer.valueOf(serverid));
-//		user.setServer(server);
+		// Server server = new Server();
+		// server.setId(Integer.valueOf(serverid));
+		// user.setServer(server);
 		user.setServerid(Integer.valueOf(serverid));
 		user.setValidtime(DateUtil.dateAdd(DateUtil.ADD_SECOND, 1000, "yyyyMMddHHmmssSSS", "yyyyMMddHHmmssSSS"));
 		dao.deleteUser(user);

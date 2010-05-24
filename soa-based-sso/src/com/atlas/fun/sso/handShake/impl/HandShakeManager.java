@@ -1,13 +1,13 @@
-package com.apex.sso.handShake.impl;
+package com.atlas.fun.sso.handShake.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.apex.sso.entity.Server;
-import com.apex.sso.handShake.IHandShakeDao;
-import com.apex.sso.handShake.IHandShakeManger;
+import com.atlas.fun.sso.entity.Server;
+import com.atlas.fun.sso.handShake.IHandShakeDao;
+import com.atlas.fun.sso.handShake.IHandShakeManger;
 
 @Service
 public class HandShakeManager implements IHandShakeManger {
