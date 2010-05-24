@@ -1,4 +1,4 @@
-package com.apex.sso.test;
+package com.atlas.fun.sso.test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
