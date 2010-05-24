@@ -1,4 +1,4 @@
-package com.apex.sso.client.config;
+package com.atlas.fun.sso.client.config;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.XMLConfiguration;

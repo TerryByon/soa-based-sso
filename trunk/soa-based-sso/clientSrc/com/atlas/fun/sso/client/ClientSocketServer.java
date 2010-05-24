@@ -1,4 +1,4 @@
-package com.apex.sso.client;
+package com.atlas.fun.sso.client;
 
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
@@ -7,7 +7,7 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.security.Key;
 
-import com.apex.sso.client.config.Configuration;
+import com.atlas.fun.sso.client.config.Configuration;
 
 public class ClientSocketServer implements Runnable {
 	private static final int serverPort = 8030;
