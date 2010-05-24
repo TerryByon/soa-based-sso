@@ -19,11 +19,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import util.EnDeClip;
 
 import com.atlas.fun.sso.entity.Server;
 import com.atlas.fun.sso.handShake.IHandShakeController;
 import com.atlas.fun.sso.handShake.IHandShakeManger;
+import com.atlas.fun.util.EnDeClip;
 
 @Controller
 @RequestMapping("/handshake.apx")

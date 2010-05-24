@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.atlas.fun.sso.addserver.IAddServerDao;
 import com.atlas.fun.sso.addserver.IAddServerManager;
 import com.atlas.fun.sso.entity.Server;
+import com.atlas.fun.util.EnDeClip;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -16,7 +17,6 @@ import java.io.ObjectOutputStream;
 import java.security.Key;
 import java.util.List;
 
-import util.EnDeClip;
 
 @Service
 public class AddServerManager implements IAddServerManager {
