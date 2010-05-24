@@ -1,4 +1,4 @@
-package com.apex.sso.client;
+package com.atlas.fun.sso.client;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -8,10 +8,9 @@ import java.net.SocketTimeoutException;
 import java.util.HashMap;
 import java.util.Map;
 
-import util.EnDeClip;
-
 import com.apex.commons.utils.DomForXPath;
-import com.apex.sso.client.config.Configuration;
+import com.atlas.fun.sso.client.config.Configuration;
+import com.atlas.fun.util.EnDeClip;
 
 public class ClientController implements Runnable {
 	private Socket socket;
@@ -75,11 +74,11 @@ public class ClientController implements Runnable {
 				StringBuilder sb = new StringBuilder();
 				while((lineData = in.readLine())!= null){
 					sb.append(lineData);
-					
-					if(Boolean.parseBoolean(Configuration.getStringValue("debug-mode").trim())){					
+
+					if(Boolean.parseBoolean(Configuration.getStringValue("debug-mode").trim())){
 						System.out.println(">" + lineData);
 					}
-					
+
 					if(lineData.trim().endsWith(endStr)){
 						out.println(process(sb.toString()));
 						out.flush();

@@ -1,4 +1,4 @@
-package com.apex.sso.client;
+package com.atlas.fun.sso.client;
 
 import java.io.BufferedReader;
 import java.io.IOException;

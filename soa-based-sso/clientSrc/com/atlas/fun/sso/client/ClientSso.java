@@ -1,4 +1,4 @@
-package com.apex.sso.client;
+package com.atlas.fun.sso.client;
 
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
@@ -6,11 +6,10 @@ import java.security.Key;
 import java.util.HashMap;
 import java.util.Map;
 
-import util.EnDeClip;
-
 import com.apex.commons.utils.ApexCommonsException;
 import com.apex.commons.utils.DomForXPath;
-import com.apex.sso.client.config.Configuration;
+import com.atlas.fun.sso.client.config.Configuration;
+import com.atlas.fun.util.EnDeClip;
 
 public class ClientSso {
 	private static final String endStr = "</root>";
