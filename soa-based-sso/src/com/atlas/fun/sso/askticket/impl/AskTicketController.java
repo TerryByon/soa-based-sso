@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import util.EnDeClip;
 
 import com.atlas.fun.sso.askticket.IAskTicketController;
 import com.atlas.fun.sso.askticket.IAskTicketManager;
@@ -26,6 +25,7 @@ import com.atlas.fun.sso.entity.Server;
 import com.atlas.fun.sso.entity.User;
 import com.atlas.fun.sso.handShake.IHandShakeManger;
 import com.atlas.fun.sso.handShake.impl.HandShakeController;
+import com.atlas.fun.util.EnDeClip;
 
 @Controller
 @RequestMapping("/askticket.apx")

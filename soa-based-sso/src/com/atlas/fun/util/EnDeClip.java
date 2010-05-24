@@ -1,4 +1,4 @@
-package util;
+package com.atlas.fun.util;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
