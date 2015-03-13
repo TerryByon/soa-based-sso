@@ -1,0 +1,1 @@
+This project is for building SOA based SSO service. In general developers in SMBs needed for SSO system consider purchasing types of COTS SSO solution, but these solutions are expensive and needed integration efforts. SOA based SSO service will be the right choice with low cost and high return.
